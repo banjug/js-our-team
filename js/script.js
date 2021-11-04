@@ -11,9 +11,11 @@ RICREARE IL LAYOUT
 4. alla pressione del pulsante far apparire una nuova card con un nuovo dipendente
 */
 
+// seleziona il contenitore team dove inserire l'html
 const teamCont = document.querySelector('.team-container');
-console.log(teamCont);
+// console.log(teamCont);
 
+// array di oggetti, un oggetto per menbro del team 
 var employees = [
     {
         'emplName' : 'Wayne Barnett',
@@ -52,34 +54,97 @@ var employees = [
     }
 ];
 
-for (let i = 0; i < employees.length; i++) {
+// richiama la funzione che aggiunge le card dei dipendenti
+baseTeam(employees, teamCont);
 
-    let nameData = '';
-    let titleData = '';
-    let photoData = '';
+// seleziona il pulsante per inviare il form 
+const formBtn = document.getElementById('addMemberButton');
+// variabile oggetto dove salvare il nuovo dipendente aggiunto nel form 
+let newEmployee;
 
-    for (var key in employees) {
-        nameData = employees[i].emplName;
-        titleData = employees[i].emplTitle;
-        photoData = employees[i].emplPhoto;
+// al click richiama la funzione che salva i dati del form e li usa per generare la card 
+formBtn.addEventListener('click',
+
+    function() {
+        userAddForm(newEmployee)
     }
+);
 
-    console.log(nameData);
-    console.log(titleData);
-    console.log(photoData);
 
-    teamCont.innerHTML += `
-        <div class="team-card">
-            <div class="card-image">
-                <img
-                    src="${photoData}"
-                    alt="${nameData}"
-                />
+// -----------------------------------------------------
+// funzioni---------------------------------------------
+
+
+// funzione che aggiunge in pagina le card dei dipendenti
+function baseTeam(objectsArray, htmlContainer) {
+    
+    // scorro l'array di oggetti
+    for (let i = 0; i < objectsArray.length; i++) {
+    
+        // variabili per ogni chiave, dati del dipendente
+        let nameData = '';
+        let titleData = '';
+        let photoData = '';
+    
+        // scorro l'oggetto in posizione [i] per salvarmi i valori delle chiavi nelle variabili
+        for (var key in objectsArray) {
+            nameData = objectsArray[i].emplName;
+            titleData = objectsArray[i].emplTitle;
+            photoData = objectsArray[i].emplPhoto;
+        }
+    
+        // inserisco l'html in pagina utilizzando i dati salvati nel ciclo for in
+        htmlContainer.innerHTML += `
+            <div class="team-card">
+                <div class="card-image">
+                    <img
+                        src="${photoData}"
+                        alt="${nameData}"
+                    />
+                </div>
+                <div class="card-text">
+                    <h3>${nameData}</h3>
+                    <p>${titleData}</p>
+                </div>
             </div>
-            <div class="card-text">
-                <h3>${nameData}</h3>
-                <p>${titleData}</p>
+        `
+    };
+
+}
+
+// funzione al click aggiunge la card dell'utente inserito nel form
+function userAddForm(newObject) {
+    
+    // salvare i dati del form 
+    var formName = document.getElementById('name').value;
+    var formRole = document.getElementById('role').value;
+    var formImg = document.getElementById('image').value;
+
+    // al click creo un oggetto per il nuovo dipendente aggiunto
+    newObject = {
+        'emplName' : formName,
+        'emplTitle' : formRole,
+        'emplPhoto' : formImg
+    };
+
+    console.log(newObject);
+
+    employees.push(newObject);
+    console.log(employees);
+    
+        // inserisco l'html in pagina utilizzando i dati salvati nel ciclo for in
+        teamCont.innerHTML += `
+            <div class="team-card">
+                <div class="card-image">
+                    <img
+                        src="${newObject.emplPhoto}"
+                        alt="${newObject.emplName}"
+                    />
+                </div>
+                <div class="card-text">
+                    <h3>${newObject.emplName}</h3>
+                    <p>${newObject.emplTitle}</p>
+                </div>
             </div>
-        </div>
-    `
-};
+        `   
+}
